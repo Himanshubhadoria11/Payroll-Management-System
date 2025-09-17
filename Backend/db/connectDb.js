@@ -3,13 +3,14 @@ const mongoose =require('mongoose')
 
 const connectDb=()=>{
     //For local Db
-    return mongoose.connect(process.env.LOCAL_URL)
+    // return mongoose.connect(process.env.LOCAL_URL)
+     return mongoose.connect(process.env.MONGO_URI)
 
     //For cloud Db
     //return mongoose.connect(database)
 
     .then(()=>{
-        console.log("Connected Successfully")
+        console.log("MongoDb Connected Successfully")
     })
     .catch((error)=>{
         console.log(error)

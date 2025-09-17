@@ -34,7 +34,7 @@ Authentication	JWT (JSON Web Token)	Secure token-based authentication for role-b
 API Calls	Axios	Simplified HTTP requests for client-server communication
 Setup Instructions
 1. Clone the repository
-git clone https://github.com/your-username/payroll-management.git
+git clone https://github.com/Himanshubhadoria11/Payroll-Management-System.git
 cd payroll-management
 
 2. Backend Setup
@@ -51,7 +51,7 @@ MONGO_URI=<Your MongoDB connection string>
 JWT_SECRET=<Your JWT secret>
 
 3. Frontend Setup
-cd ../client
+cd frontend
 npm install
 npm start                   # Start frontend server
 
