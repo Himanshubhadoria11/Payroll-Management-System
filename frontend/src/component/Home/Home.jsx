@@ -8,6 +8,7 @@ import { Navigate } from "react-router-dom";
 import { Context } from "../../main";
 
 
+
 function Home() {
   const { isAuthorized } = useContext(Context);
   if (!isAuthorized) {

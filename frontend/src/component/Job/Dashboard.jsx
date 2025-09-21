@@ -1,125 +1,12 @@
 
 
-
-// import { useEffect, useState, useContext } from "react";
-// import axios from "axios";
-// import { Context } from "../../main";
-
-// export default function Dashboard() {
-//   const { user } = useContext(Context);
-//   const [salarySlips, setSalarySlips] = useState([]);
-//   const [expenses, setExpenses] = useState([]);
-//   const [loadingSlips, setLoadingSlips] = useState(true);
-//   const [loadingExpenses, setLoadingExpenses] = useState(true);
-
-//   useEffect(() => {
-//     // Fetch Salary Slips
-//     const fetchSalarySlips = async () => {
-//       try {
-//         const res = await axios.get("/api/salary-slips", { withCredentials: true });
-//         // Ensure data is always an array
-//         setSalarySlips(Array.isArray(res.data) ? res.data : res.data.slips || []);
-//       } catch (err) {
-//         console.error("Failed to fetch salary slips:", err);
-//         setSalarySlips([]);
-//       } finally {
-//         setLoadingSlips(false);
-//       }
-//     };
-
-//     // Fetch Expenses
-//     const fetchExpenses = async () => {
-//       try {
-//         const res = await axios.get("/api/expenses", { withCredentials: true });
-//         setExpenses(Array.isArray(res.data) ? res.data : []);
-//       } catch (err) {
-//         console.error("Failed to fetch expenses:", err);
-//         setExpenses([]);
-//       } finally {
-//         setLoadingExpenses(false);
-//       }
-//     };
-
-//     fetchSalarySlips();
-//     fetchExpenses();
-//   }, []);
-
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-
-//       {/* Salary Slips Table */}
-//       <h2 className="text-xl font-semibold mb-2">Salary Slips</h2>
-//       <table className="border-collapse border border-gray-300 w-full mb-6">
-//         <thead>
-//           <tr className="bg-gray-200">
-//             <th className="border p-2">Month</th>
-//             <th className="border p-2">Basic Pay</th>
-//             <th className="border p-2">Allowances</th>
-//             <th className="border p-2">Deductions</th>
-//             <th className="border p-2">Net Salary</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {loadingSlips ? (
-//             <tr>
-//               <td colSpan="5" className="text-center p-2">Loading salary slips...</td>
-//             </tr>
-//           ) : salarySlips.length > 0 ? (
-//             salarySlips.map((slip) => (
-//               <tr key={slip._id}>
-//                 <td className="border p-2">{slip.month}</td>
-//                 <td className="border p-2">{slip.basicPay}</td>
-//                 <td className="border p-2">{slip.allowances}</td>
-//                 <td className="border p-2">{slip.deductions}</td>
-//                 <td className="border p-2">{slip.netSalary}</td>
-//               </tr>
-//             ))
-//           ) : (
-//             <tr>
-//               <td colSpan="5" className="text-center p-2">No salary slips found</td>
-//             </tr>
-//           )}
-//         </tbody>
-//       </table>
-
-//       {/* Expenses Table */}
-//       <h2 className="text-xl font-semibold mb-2">Expense History</h2>
-//       <table className="border-collapse border border-gray-300 w-full">
-//         <thead>
-//           <tr className="bg-gray-200">
-//             <th className="border p-2">Month</th>
-//             <th className="border p-2">Description</th>
-//             <th className="border p-2">Amount</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {loadingExpenses ? (
-//             <tr>
-//               <td colSpan="3" className="text-center p-2">Loading expenses...</td>
-//             </tr>
-//           ) : expenses.length > 0 ? (
-//             expenses.map((e) => (
-//               <tr key={e._id}>
-//                 <td className="border p-2">{e.month}</td>
-//                 <td className="border p-2">{e.description}</td>
-//                 <td className="border p-2">{e.amount}</td>
-//               </tr>
-//             ))
-//           ) : (
-//             <tr>
-//               <td colSpan="3" className="text-center p-2">No expenses submitted</td>
-//             </tr>
-//           )}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// }
-
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Context } from "../../main";
+
+
+
+
 
 export default function Dashboard() {
   const { user } = useContext(Context);
@@ -131,7 +18,18 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchSalarySlips = async () => {
       try {
-        const res = await axios.get("/api/salary-slips", { withCredentials: true });
+        // const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/salary-slips`, { withCredentials: true });
+        const token = localStorage.getItem("token");
+
+const res = await axios.get(
+  `${import.meta.env.VITE_API_BASE_URL}/api/salary-slips`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
         setSalarySlips(Array.isArray(res.data) ? res.data : res.data.slips || []);
       } catch (err) {
         console.error("Failed to fetch salary slips:", err);
@@ -141,17 +39,56 @@ export default function Dashboard() {
       }
     };
 
-    const fetchExpenses = async () => {
-      try {
-        const res = await axios.get("/api/expenses", { withCredentials: true });
-        setExpenses(Array.isArray(res.data) ? res.data : []);
-      } catch (err) {
-        console.error("Failed to fetch expenses:", err);
-        setExpenses([]);
-      } finally {
-        setLoadingExpenses(false);
+//     const fetchExpenses = async () => {
+//       try {
+//          const token = localStorage.getItem("token");
+
+// const res = await axios.get(
+//   `${import.meta.env.VITE_API_BASE_URL}/api/expenses`,
+//   {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   }
+// );
+//        // const res = await axios.get( `${import.meta.env.VITE_API_BASE_URL}/api/expenses`, { withCredentials: true });
+//         setExpenses(Array.isArray(res.data) ? res.data : []);
+//       } catch (err) {
+//         console.error("Failed to fetch expenses:", err);
+//         setExpenses([]);
+//       } finally {
+//         setLoadingExpenses(false);
+//       }
+//     };
+const fetchExpenses = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.log("No token found.");
+      setExpenses([]); // just clear expenses, no redirect
+      return;
+    }
+
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/api/expenses`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        // withCredentials: true, // if backend uses cookies
       }
-    };
+    );
+
+    setExpenses(Array.isArray(res.data) ? res.data : []);
+  } catch (err) {
+    console.error("Failed to fetch expenses:", err);
+    setExpenses([]); // clear expenses if error occurs
+  } finally {
+    setLoadingExpenses(false);
+  }
+};
+
 
     fetchSalarySlips();
     fetchExpenses();
@@ -252,6 +189,7 @@ export default function Dashboard() {
       <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
         <thead>
           <tr className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+             <th className="p-3 text-sm font-medium text-left">Emp_Id</th>
             <th className="p-3 text-sm font-medium text-left">Month</th>
             <th className="p-3 text-sm font-medium text-left">Basic Pay</th>
             <th className="p-3 text-sm font-medium text-left">Allowances</th>
@@ -274,6 +212,7 @@ export default function Dashboard() {
                   idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                 }`}
               >
+                 <td className="p-3">{slip.employeeId}</td>
                 <td className="p-3">{slip.month}</td>
                 <td className="p-3">{slip.basicPay}</td>
                 <td className="p-3">{slip.allowances}</td>
@@ -325,6 +264,7 @@ export default function Dashboard() {
                   idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                 }`}
               >
+                
                 <td className="p-3">{e.month}</td>
                 <td className="p-3">{e.description}</td>
                 <td className="p-3 font-semibold text-red-600">₹{e.amount}</td>

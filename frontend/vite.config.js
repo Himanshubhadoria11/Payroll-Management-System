@@ -8,10 +8,19 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:7777',
+         target: 'http://localhost:7777',
+        //  target: 'https://payrollbackend-s29z.onrender.com',
         changeOrigin: true,
         
       },
     },
+     allowedHosts: ['.onrender.com'],
   },
-})
+
+preview: {
+    host: "0.0.0.0",                        // required for Render
+    port: process.env.PORT || 5173,         // use Render's port
+    allowedHosts: ["payrollfrontend.onrender.com"] // whitelist your domain
+  }
+ })
+

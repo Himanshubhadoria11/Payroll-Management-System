@@ -2,6 +2,9 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Context } from "../../main";
 
+
+
+
 export default function ExpenseForm({ fetchExpenses }) {
   const { user } = useContext(Context);
   const [form, setForm] = useState({
@@ -20,12 +23,25 @@ export default function ExpenseForm({ fetchExpenses }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/expenses", {
-        employeeId: user._id,
-        month: form.month,
-        description: form.description,
-        amount: Number(form.amount),
-      }, { withCredentials: true });
+      const token = localStorage.getItem("token"); // or wherever you store it
+
+await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/expenses`, {
+  employeeId: user._id,
+  month: form.month,
+  description: form.description,
+  amount: Number(form.amount),
+}, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
+      // await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/expenses`, {
+      //   employeeId: user._id,
+      //   month: form.month,
+      //   description: form.description,
+      //   amount: Number(form.amount),
+      // }, { withCredentials: true });
 
       alert("Expense added successfully!");
       setForm({ month: "", description: "", amount: "" });
@@ -39,33 +55,7 @@ export default function ExpenseForm({ fetchExpenses }) {
   return (
    
      
-    // <form onSubmit={handleSubmit} className="space-y-2">
-    //   <input
-    //     name="month"
-    //     placeholder="Month (e.g., September 2025)"
-    //     value={form.month}
-    //     onChange={handleChange}
-    //     required
-    //   />
-    //   <input
-    //     name="description"
-    //     placeholder="Expense Description"
-    //     value={form.description}
-    //     onChange={handleChange}
-    //     required
-    //   />
-    //   <input
-    //     name="amount"
-    //     type="number"
-    //     placeholder="Amount"
-    //     value={form.amount}
-    //     onChange={handleChange}
-    //     required
-    //   />
-    //   <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-    //     Add Expense
-    //   </button>
-    // </form>
+    
   
 
 <form 

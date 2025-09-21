@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+
+
 const Profile = () => {
   const { id } = useParams();
   const [profileData, setProfileData] = useState(null);
@@ -19,7 +21,11 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get('/api/getUser');
+       // const response = await axios.get( `${import.meta.env.VITE_API_BASE_URL}/api/getUser`);
+        const token = localStorage.getItem("token");
+const response= await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/getUser`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
         setProfileData(response.data);
         setName(response.data.name);
         setEmail(response.data.email);
@@ -37,7 +43,11 @@ const Profile = () => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post( `/api/updateprofile/${id}`, { name, email });
+      //const response = await axios.post( `${import.meta.env.VITE_API_BASE_URL}/api/updateprofile/${id}`, { name, email });
+        const token = localStorage.getItem("token");
+const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/updateprofile/${id}`,{name,email}, {
+  headers: { Authorization: `Bearer ${token}` }
+});
       alert(response.data.message || 'Profile updated successfully');
       setProfileData((prevData) => ({ ...prevData, name, email }));
     } catch (error) {
@@ -47,14 +57,32 @@ const Profile = () => {
     } 
   };
 
-  // Handle password change
   const handleChangePassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/changepassword/${id}`, {
-        currentPassword,
-        newPassword,
-      });
+      // const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/changepassword/${id}`, {
+      //  currentPassword,
+      //   newPassword,
+      // });
+      const token = localStorage.getItem("token");
+
+const response = await axios.post(
+  `${import.meta.env.VITE_API_BASE_URL}/api/updateprofile/${id}`,
+  {
+    name,
+    email,
+    currentPassword,
+    newPassword,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+console.log("Profile updated:", res.data);
+
       alert(response.data.message || 'Password changed successfully');
       setCurrentPassword('');
       setNewPassword('');

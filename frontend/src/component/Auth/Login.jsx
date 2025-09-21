@@ -5,6 +5,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Context } from "../../main";
 
+
+
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,20 +15,33 @@ function Login() {
   
   const { isAuthorized, setIsAuthorized } = useContext(Context);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post("api/login", { email, password, role });
-      toast.success(data.message);
-      setEmail("");
-      setPassword("");
-      setRole("");
-      setIsAuthorized(true);
-    } catch (error) {
-      toast.error(error.response.data.message);
-      console.log(error);
-    }
-  };
+  
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/api/login`,
+      { email, password, role }
+    );
+
+    // Save token & user info
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    setIsAuthorized(true); // Update context
+    // Optionally, you can have setUser if you use user state in context
+    toast.success(data.message);
+
+    // Clear form
+    setEmail("");
+    setPassword("");
+    setRole("");
+  } catch (error) {
+    console.error(error);
+    toast.error(error?.response?.data?.message || "Login failed");
+  }
+};
+
 
   if (isAuthorized) {
     return <Navigate to={"/"} />;

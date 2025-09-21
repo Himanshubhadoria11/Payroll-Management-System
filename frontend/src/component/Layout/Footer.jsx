@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Context } from '../../main';
 import { useNavigate } from 'react-router-dom';
 
+
 function Footer() {
     const [show, setShow]=useState(false);
     const {isAuthorized, setIsAuthorized,user}=useContext(Context);

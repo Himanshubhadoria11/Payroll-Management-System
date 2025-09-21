@@ -184,6 +184,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+
+
 export default function HeroCarousel() {
   return (
     <div className="relative w-full h-[90vh]">
